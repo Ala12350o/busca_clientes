@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscar CEP</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>Consulta de CEP</h1>
+    <img src="../assets/images/logo.png" alt="Logo Correios" 
+    class="logo-correios">
+  </header>
+
+  <main>
+    <label for="cep">Digite o CEP:</label><br>
+    <input type="text" id="cep" maxlength="9" 
+    placeholder="Ex: 01001-000" />
+    <button onclick="buscarCep()">Buscar</button>
+    <div id="resultado"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
