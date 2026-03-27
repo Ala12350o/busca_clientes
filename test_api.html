@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste API</title>
+</head>
+<body>
+    <h1>Teste de Conexão com API</h1>
+    <button onclick="testarAPI()">Testar API</button>
+    <div id="resultado"></div>
+
+    <script>
+        async function testarAPI() {
+            const resultado = document.getElementById('resultado');
+            resultado.innerHTML = 'Testando...';
+            
+            try {
+                console.log('Iniciando teste da API...');
+                
+                const response = await fetch('http://localhost:3000/clientes');
+                
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+                console.log('Response headers:', response.headers);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                console.log('Dados recebidos:', data);
+                
+                resultado.innerHTML = `
+                    <h3>✅ API funcionando!</h3>
+                    <p>Status: ${response.status}</p>
+                    <p>Clientes encontrados: ${data.length}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+            } catch (error) {
+                console.error('Erro no teste:', error);
+                resultado.innerHTML = `
+                    <h3>❌ Erro na API</h3>
+                    <p>Erro: ${error.message}</p>
+                    <p>Tipo: ${error.name}</p>
+                    <p>Stack: ${error.stack}</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

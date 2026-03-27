@@ -4,24 +4,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buscar CEP</title>
+  <title>Busca de Clientes</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
   <header>
-    <h1>Consulta de CEP</h1>
-    <img src="../assets/images/logo.png" alt="Logo Correios" 
-    class="logo-correios">
+    <h1>Sistema de Busca de Clientes</h1>
   </header>
 
   <main>
-    <label for="cep">Digite o CEP:</label><br>
-    <input type="text" id="cep" maxlength="9" 
-    placeholder="Ex: 01001-000" />
-    <button onclick="buscarCep()">Buscar</button>
+    <div class="botoes-principais">
+      <button id="btn-todos" onclick="buscarTodosClientes()">Buscar Todos os Clientes</button>
+      <button id="btn-testar" onclick="testarConexaoAPI()" style="background: #f39c12; margin-left: 10px;">Testar Conexão</button>
+    </div>
+    
+    <div class="busca-cpf">
+      <label for="cpf">Digite o CPF para busca específica:</label><br>
+      <input type="text" id="cpf" maxlength="14" placeholder="Ex: 123.456.789-00" />
+      <button id="btn-cpf" onclick="buscarClientePorCpf()">Buscar por CPF</button>
+    </div>
+    
     <div id="resultado"></div>
+    <div id="erro" class="erro hidden"></div>
   </main>
 
   <script src="script.js"></script>
