@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistema de Gestão</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>Sistema de Gestão</h1>
+    <p>Escolha o módulo que deseja acessar</p>
+  </header>
+
+  <main>
+    <div class="modulos-container">
+      <div class="modulo-card" onclick="window.location.href='pages/clientes.html'">
+        <div class="modulo-icon">Clientes</div>
+        <p>Gerencie cadastros, buscas e informações dos clientes</p>
+        <button class="modulo-btn">Acessar Clientes</button>
+      </div>
+
+      <div class="modulo-card" onclick="window.location.href='pages/produtos.html'">
+        <div class="modulo-icon">Produtos</div>
+        <p>Controle estoque, preços e informações dos produtos</p>
+        <button class="modulo-btn">Acessar Produtos</button>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-card">
+        <h3>Status do Sistema</h3>
+        <div id="status-info">
+          <div class="status-item">
+            <span class="status-label">API:</span>
+            <span class="status-value" id="api-status">Verificando...</span>
+          </div>
+          <div class="status-item">
+            <span class="status-label">Versão:</span>
+            <span class="status-value">v1.0.0</span>
+          </div>
+        </div>
+        <button onclick="testarStatusAPI()" class="btn-status">Verificar Status</button>
+      </div>
+
+      <div class="info-card">
+        <h3>Recursos</h3>
+        <ul class="features-list">
+          <li>Busca completa de clientes</li>
+          <li>Gestão de produtos por categoria</li>
+          <li>Interface responsiva e moderna</li>
+          <li>API RESTful integration</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <script src="scripts/script-home.js"></script>
+</body>
+
+</html>

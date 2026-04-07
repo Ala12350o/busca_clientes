@@ -4,20 +4,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Busca de Clientes</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Gestão de Clientes</title>
+  <link rel="stylesheet" href="../assets/style.css">
 </head>
 
 <body>
 
   <header>
-    <h1>Sistema de Busca de Clientes</h1>
+    <h1>Gestão de Clientes</h1>
   </header>
 
   <main>
     <div class="botoes-principais">
       <button id="btn-todos" onclick="buscarTodosClientes()">Buscar Todos os Clientes</button>
-      <button id="btn-testar" onclick="testarConexaoAPI()" style="background: #f39c12; margin-left: 10px;">Testar Conexão</button>
+      <button id="btn-cadastrar" onclick="cadastrarCliente()">Cadastrar Cliente</button>
+      <button id="btn-testar" onclick="testarConexaoAPI()">Testar Conexão</button>
     </div>
     
     <div class="busca-cpf">
@@ -26,11 +27,19 @@
       <button id="btn-cpf" onclick="buscarClientePorCpf()">Buscar por CPF</button>
     </div>
     
+    <div class="acoes-adicionais">
+      <h3>Ações Adicionais</h3>
+      <div class="botoes-secundarios">
+        <button id="btn-atualizar" onclick="atualizarCliente()">Atualizar Cliente</button>
+        <button id="btn-deletar" onclick="deletarCliente()">Deletar Cliente</button>
+      </div>
+    </div>
+    
     <div id="resultado"></div>
     <div id="erro" class="erro hidden"></div>
   </main>
 
-  <script src="script.js"></script>
+  <script src="../scripts/script-clientes.js"></script>
 </body>
 
 </html>

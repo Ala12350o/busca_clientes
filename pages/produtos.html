@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestão de Produtos</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+
+<body>
+
+  <header>
+    <h1>Gestão de Produtos</h1>
+  </header>
+
+  <main>
+    <div class="botoes-principais">
+      <button id="btn-todos" onclick="buscarTodosProdutos()">Buscar Todos os Produtos</button>
+      <button id="btn-cadastrar" onclick="cadastrarProduto()">Cadastrar Produto</button>
+      <button id="btn-testar" onclick="testarConexaoAPI()">Testar Conexão</button>
+    </div>
+    
+    <div class="busca-id">
+      <label for="produto-id">Digite o ID para busca específica:</label><br>
+      <input type="text" id="produto-id" placeholder="Ex: 1" />
+      <button id="btn-id" onclick="buscarProdutoPorId()">Buscar por ID</button>
+    </div>
+    
+    <div class="acoes-adicionais">
+      <h3>Ações Adicionais</h3>
+      <div class="botoes-secundarios">
+        <button id="btn-atualizar" onclick="atualizarProduto()">Atualizar Produto</button>
+        <button id="btn-deletar" onclick="deletarProduto()">Deletar Produto</button>
+      </div>
+    </div>
+    
+    <div id="resultado-produtos"></div>
+    <div id="erro-produtos" class="erro hidden"></div>
+  </main>
+
+  <script src="../scripts/script-produtos.js"></script>
+</body>
+
+</html>
