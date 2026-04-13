@@ -18,7 +18,7 @@
             try {
                 console.log('Iniciando teste da API...');
                 
-                const response = await fetch('http://localhost:3000/clientes');
+                const response = await ch('http://localhost:3000/clientes');
                 
                 console.log('Response status:', response.status);
                 console.log('Response ok:', response.ok);
