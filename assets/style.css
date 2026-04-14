@@ -253,7 +253,7 @@ main {
   box-shadow: var(--shadow);
   position: fixed;
   bottom: 2rem;
-  right: 2rem;
+  left: 2rem;
   z-index: 100;
   text-decoration: none;
   display: flex;
@@ -379,6 +379,32 @@ main {
   padding: 2rem;
   margin-bottom: 1rem;
   box-shadow: var(--shadow);
+  position: relative;
+}
+
+.btn-delete-x {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.btn-delete-x:hover {
+  background: #dc2626;
+  transform: scale(1.1);
 }
 
 .cliente-card h3 {
@@ -504,6 +530,29 @@ main {
 .btn-deletar:hover {
   background: #dc2626;
   transform: translateY(-2px);
+}
+
+.btn-editar {
+  background: #3b82f6;
+  color: var(--white);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.btn-editar:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.card-actions {
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--medium-gray);
 }
 
 /* Responsivo */

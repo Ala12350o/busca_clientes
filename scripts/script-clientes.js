@@ -1,5 +1,7 @@
 // Script de Clientes - Versão Refatorada
-const API_BASE_URL = 'http://localhost:3000';
+if (typeof API_BASE_URL === 'undefined') {
+  var API_BASE_URL = 'http://localhost:3000';
+}
 
 // Estado global
 const state = {
@@ -89,6 +91,20 @@ async function deletarClienteAPI(cpf) {
   return response.json().catch(() => ({ success: true }));
 }
 
+async function atualizarCliente(cpf, dados) {
+  const response = await fetch(`${API_BASE_URL}/clientes/${encodeURIComponent(cpf)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(dados)
+  });
+  
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+  }
+  
+  return response.json().catch(() => ({ success: true }));
+}
+
 // ============ FUNÇÕES DE UI ============
 function mostrarErro(mensagem) {
   const erroDiv = document.getElementById('erro');
@@ -132,12 +148,16 @@ function mostrarSucesso(dados) {
 function templateCliente(cliente) {
   return `
     <div class="cliente-card">
+      <button class="btn-delete-x" onclick="confirmarDeletarCliente('${cliente.cpf}')" title="Deletar Cliente">×</button>
       <h3>${cliente.nome}</h3>
       <p><strong>CPF:</strong> ${formatarCPF(cliente.cpf)}</p>
       <p><strong>Idade:</strong> ${cliente.idade} anos</p>
       <p><strong>Endereço:</strong> ${cliente.endereco}</p>
       <p><strong>Bairro:</strong> ${cliente.bairro}</p>
       <p><strong>Contato:</strong> ${cliente.contato}</p>
+      <div class="card-actions">
+        <button class="btn-editar" onclick="editarCliente('${cliente.cpf}')" title="Editar Cliente">✎ Editar</button>
+      </div>
     </div>
   `;
 }
@@ -151,11 +171,19 @@ async function buscarTodosClientes() {
     esconderErro();
     mostrarLoading();
     
-    const clientes = await listarClientes();
+    const usuario = getUsuarioLogado();
+    if (!usuario) {
+      mostrarErro('Usuário não está logado.');
+      state.loading = false;
+      return;
+    }
+    
+    const todosClientes = await listarClientes();
+    const clientes = todosClientes.filter(c => c.usuario_codigo === usuario.codigo);
     const resultadoDiv = document.getElementById('resultado');
     
     if (!clientes || clientes.length === 0) {
-      resultadoDiv.innerHTML = '<p>Nenhum cliente encontrado.</p>';
+      resultadoDiv.innerHTML = '<p>Nenhum cliente encontrado para este usuário.</p>';
     } else {
       resultadoDiv.innerHTML = clientes.map(c => templateCliente(c)).join('');
     }
@@ -185,10 +213,19 @@ async function buscarClientePorCpf() {
     esconderErro();
     mostrarLoading();
     
+    const usuario = getUsuarioLogado();
+    if (!usuario) {
+      mostrarErro('Usuário não está logado.');
+      state.loading = false;
+      return;
+    }
+    
     const cliente = await buscarCliente(cpf);
     const resultadoDiv = document.getElementById('resultado');
     
     if (!cliente) {
+      resultadoDiv.innerHTML = '<p>Cliente não encontrado com este CPF.</p>';
+    } else if (cliente.usuario_codigo != usuario.codigo) {
       resultadoDiv.innerHTML = '<p>Cliente não encontrado com este CPF.</p>';
     } else {
       resultadoDiv.innerHTML = templateCliente(cliente);
@@ -276,13 +313,21 @@ async function cadastrarCliente() {
     e.preventDefault();
     if (state.loading) return;
     
+    const usuario = getUsuarioLogado();
+    if (!usuario) {
+      mostrarErro('Usuário não está logado.');
+      state.loading = false;
+      return;
+    }
+    
     const dados = {
       cpf: document.getElementById('input-cpf').value.replace(/\D/g, ''),
       nome: document.getElementById('input-nome').value.trim(),
       idade: parseInt(document.getElementById('input-idade').value),
       endereco: document.getElementById('input-endereco').value.trim(),
       bairro: document.getElementById('input-bairro').value.trim(),
-      contato: document.getElementById('input-contato').value.trim()
+      contato: document.getElementById('input-contato').value.trim(),
+      usuario_codigo: usuario.codigo
     };
     
     // Validações
@@ -320,10 +365,11 @@ async function cadastrarCliente() {
     mostrarLoading();
     
     try {
-      // Verificar se CPF já existe antes de cadastrar
-      const clienteExistente = await buscarCliente(dados.cpf);
+      // Verificar se CPF já existe para este usuário antes de cadastrar
+      const todosClientes = await listarClientes();
+      const clienteExistente = todosClientes.find(c => c.cpf === dados.cpf && c.usuario_codigo === usuario.codigo);
       if (clienteExistente) {
-        mostrarErro('CPF já cadastrado. Tente outro CPF.');
+        mostrarErro('Este CPF já foi cadastrado por este usuário. Tente outro CPF.');
         state.loading = false;
         return;
       }
@@ -339,6 +385,51 @@ async function cadastrarCliente() {
 }
 
 // ============ DELETAR ============
+async function confirmarDeletarCliente(cpf) {
+  if (state.loading) return;
+  state.loading = true;
+  mostrarLoading();
+  
+  try {
+    const usuario = getUsuarioLogado();
+    if (!usuario) {
+      mostrarErro('Usuário não está logado.');
+      state.loading = false;
+      return;
+    }
+    
+    const cliente = await buscarCliente(cpf);
+    
+    if (!cliente) {
+      mostrarErro('Cliente não encontrado.');
+      state.loading = false;
+      return;
+    }
+    
+    if (cliente.usuario_codigo != usuario.codigo) {
+      mostrarErro('Você não tem permissão para deletar este cliente.');
+      state.loading = false;
+      return;
+    }
+    
+    // Mostrar confirmação
+    const resultadoDiv = document.getElementById('resultado');
+    resultadoDiv.innerHTML = `
+      <div class="cliente-card">
+        <h3>Confirmar Deleção</h3>
+        <p>Tem certeza que deseja deletar este cliente?</p>
+        ${templateCliente(cliente)}
+        <button class="btn-deletar" onclick="executarDeletar('${cpf}')">Sim, Deletar</button>
+        <button class="btn-cancelar" onclick="buscarTodosClientes()">Cancelar</button>
+      </div>
+    `;
+  } catch (error) {
+    mostrarErro('Erro ao buscar cliente.');
+  } finally {
+    state.loading = false;
+  }
+}
+
 async function deletarCliente() {
   const resultadoDiv = document.getElementById('resultado');
   esconderErro();
@@ -432,6 +523,131 @@ async function executarDeletar(cpf) {
   }
 }
 
+async function editarCliente(cpf) {
+  if (state.loading) return;
+  state.loading = true;
+  mostrarLoading();
+  
+  try {
+    const usuario = getUsuarioLogado();
+    if (!usuario) {
+      mostrarErro('Usuário não está logado.');
+      state.loading = false;
+      return;
+    }
+    
+    const cliente = await buscarCliente(cpf);
+    
+    if (!cliente) {
+      mostrarErro('Cliente não encontrado.');
+      state.loading = false;
+      return;
+    }
+    
+    if (cliente.usuario_codigo != usuario.codigo) {
+      mostrarErro('Você não tem permissão para editar este cliente.');
+      state.loading = false;
+      return;
+    }
+    
+    const resultadoDiv = document.getElementById('resultado');
+    resultadoDiv.innerHTML = `
+      <div class="cliente-card">
+        <h3>Editar Cliente</h3>
+        <form id="form-edicao">
+          <div class="form-group">
+            <label>CPF:</label>
+            <input type="text" value="${formatarCPF(cliente.cpf)}" disabled style="background-color: #e9ecef;">
+          </div>
+          <div class="form-group">
+            <label>Nome Completo *:</label>
+            <input type="text" id="edit-nome" value="${cliente.nome}" required>
+          </div>
+          <div class="form-group">
+            <label>Idade *:</label>
+            <input type="number" id="edit-idade" value="${cliente.idade}" min="1" max="120" required>
+          </div>
+          <div class="form-group">
+            <label>Endereço *:</label>
+            <input type="text" id="edit-endereco" value="${cliente.endereco}" required>
+          </div>
+          <div class="form-group">
+            <label>Bairro *:</label>
+            <input type="text" id="edit-bairro" value="${cliente.bairro}" required>
+          </div>
+          <div class="form-group">
+            <label>Contato *:</label>
+            <input type="text" id="edit-contato" value="${cliente.contato}" required>
+          </div>
+          <button type="submit" class="btn-salvar">Salvar Alterações</button>
+          <button type="button" class="btn-cancelar" onclick="buscarTodosClientes()">Cancelar</button>
+        </form>
+      </div>
+    `;
+    
+    document.getElementById('form-edicao').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      if (state.loading) return;
+      
+      const dados = {
+        nome: document.getElementById('edit-nome').value.trim(),
+        idade: parseInt(document.getElementById('edit-idade').value),
+        endereco: document.getElementById('edit-endereco').value.trim(),
+        bairro: document.getElementById('edit-bairro').value.trim(),
+        contato: document.getElementById('edit-contato').value.trim(),
+        usuario_codigo: usuario.codigo
+      };
+      
+      if (dados.nome.length < 3) {
+        mostrarErro('Nome inválido. Digite pelo menos 3 caracteres.');
+        return;
+      }
+      
+      if (!dados.idade || dados.idade < 1 || dados.idade > 120) {
+        mostrarErro('Idade inválida. Digite um valor entre 1 e 120.');
+        return;
+      }
+      
+      if (dados.endereco.length < 5) {
+        mostrarErro('Endereço inválido. Digite pelo menos 5 caracteres.');
+        return;
+      }
+      
+      if (dados.bairro.length < 3) {
+        mostrarErro('Bairro inválido. Digite pelo menos 3 caracteres.');
+        return;
+      }
+      
+      if (dados.contato.length < 3) {
+        mostrarErro('Contato inválido. Digite pelo menos 3 caracteres.');
+        return;
+      }
+      
+      state.loading = true;
+      mostrarLoading();
+      
+      try {
+        await atualizarCliente(cpf, dados);
+        resultadoDiv.innerHTML = `
+          <div class="cliente-card">
+            <h3>Cliente Atualizado com Sucesso!</h3>
+            <p>CPF: ${formatarCPF(cpf)}</p>
+            <button class="btn-salvar" onclick="buscarTodosClientes()">Ver Todos os Clientes</button>
+          </div>
+        `;
+      } catch (error) {
+        mostrarErro(`Erro ao atualizar: ${error.message}`);
+      } finally {
+        state.loading = false;
+      }
+    });
+  } catch (error) {
+    mostrarErro('Erro ao buscar cliente para edição.');
+  } finally {
+    state.loading = false;
+  }
+}
+
 function limparResultado() {
   const resultadoDiv = document.getElementById('resultado');
   if (resultadoDiv) resultadoDiv.innerHTML = '';
@@ -462,5 +678,9 @@ window.buscarTodosClientes = buscarTodosClientes;
 window.buscarClientePorCpf = buscarClientePorCpf;
 window.testarConexaoAPI = testarConexaoAPI;
 window.confirmarDeletar = confirmarDeletar;
+window.confirmarDeletarCliente = confirmarDeletarCliente;
 window.executarDeletar = executarDeletar;
 window.limparResultado = limparResultado;
+window.editarCliente = editarCliente;
+
+console.log('script-clientes.js loaded, functions exported:', Object.keys(window).filter(k => ['cadastrarCliente', 'buscarTodosClientes', 'buscarClientePorCpf'].includes(k)));

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro de Usuário - Sistema de Gestão</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .cadastro-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .cadastro-card {
+      background: var(--white);
+      border: 2px solid var(--medium-gray);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .cadastro-card h2 {
+      text-align: center;
+      color: var(--primary-blue);
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #1e293b;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--medium-gray);
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+    }
+    
+    .btn-salvar {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1rem;
+    }
+    
+    .btn-salvar:hover {
+      background: var(--dark-blue);
+    }
+    
+    .btn-voltar-login {
+      width: 100%;
+      padding: 0.75rem;
+      background: transparent;
+      color: var(--dark-gray);
+      border: 2px solid var(--medium-gray);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 0.5rem;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .btn-voltar-login:hover {
+      background: var(--medium-gray);
+    }
+    
+    .cadastro-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: var(--dark-gray);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Sistema de Gestão</h1>
+    <p>Crie sua conta</p>
+  </header>
+
+  <main class="cadastro-container">
+    <div class="cadastro-card">
+      <h2>Cadastro de Usuário</h2>
+      <form id="form-cadastro">
+        <div class="form-group">
+          <label for="codigo">Código:</label>
+          <input type="number" id="codigo" name="codigo" required placeholder="Ex: 1" min="1">
+        </div>
+        <div class="form-group">
+          <label for="nome">Nome Completo:</label>
+          <input type="text" id="nome" name="nome" required placeholder="Seu nome completo">
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha:</label>
+          <div style="position: relative;">
+            <input type="password" id="senha" name="senha" required placeholder="Crie uma senha" minlength="6" style="padding-right: 40px;">
+            <button type="button" id="toggle-senha" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 4px;">👁️</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-salvar">Cadastrar</button>
+      </form>
+      
+      <div class="cadastro-footer">
+        <p>Já tem uma conta?</p>
+        <a href="./login.html" class="btn-voltar-login">Voltar para Login</a>
+      </div>
+    </div>
+    
+    <div id="erro" class="erro hidden" style="margin-top: 1rem;"></div>
+    <div id="sucesso" class="cliente-card hidden" style="margin-top: 1rem; text-align: center;">
+      <h3>Usuário cadastrado com sucesso!</h3>
+      <p>Você será redirecionado para a página de login...</p>
+    </div>
+  </main>
+
+  <script src="../scripts/script-login.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Sistema de Gestão</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .login-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .login-card {
+      background: var(--white);
+      border: 2px solid var(--medium-gray);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+    
+    .login-card h2 {
+      text-align: center;
+      color: var(--primary-blue);
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #1e293b;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--medium-gray);
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+    }
+    
+    .btn-login {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--primary-blue);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1rem;
+    }
+    
+    .btn-login:hover {
+      background: var(--dark-blue);
+    }
+    
+    .btn-cadastrar {
+      width: 100%;
+      padding: 0.75rem;
+      background: transparent;
+      color: var(--primary-blue);
+      border: 2px solid var(--primary-blue);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 0.5rem;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    
+    .btn-cadastrar:hover {
+      background: var(--primary-blue);
+      color: white;
+    }
+    
+    .login-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: var(--dark-gray);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Sistema de Gestão</h1>
+    <p>Faça login para acessar</p>
+  </header>
+
+  <main class="login-container">
+    <div class="login-card">
+      <h2>Login</h2>
+      <form id="form-login">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required placeholder="seu@email.com">
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha:</label>
+          <div style="position: relative;">
+            <input type="password" id="senha" name="senha" required placeholder="Sua senha" style="padding-right: 40px;">
+            <button type="button" id="toggle-senha" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.2rem; padding: 4px;">👁️</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-login">Entrar</button>
+      </form>
+      
+      <div class="login-footer">
+        <p>Não tem uma conta?</p>
+        <a href="./cadastro.html" class="btn-cadastrar">Cadastrar Usuário</a>
+      </div>
+    </div>
+    
+    <div id="erro" class="erro hidden" style="margin-top: 1rem;"></div>
+  </main>
+
+  <script src="../scripts/script-login.js"></script>
+</body>
+
+</html>
