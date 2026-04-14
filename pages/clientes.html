@@ -12,6 +12,7 @@
 
   <header>
     <h1>Gestão de Clientes</h1>
+    <button onclick="logout()" class="btn-logout" style="position: absolute; top: 1rem; right: 1rem; background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Sair</button>
   </header>
 
   <main>
@@ -27,19 +28,14 @@
       <button id="btn-cpf" onclick="buscarClientePorCpf()">Buscar por CPF</button>
     </div>
     
-    <div class="acoes-adicionais">
-      <h3>Ações Adicionais</h3>
-      <div class="botoes-secundarios">
-        <button id="btn-deletar" onclick="deletarCliente()">Deletar Cliente</button>
-      </div>
-    </div>
-    
+        
     <div id="resultado"></div>
     <div id="erro" class="erro hidden"></div>
     
     <a href="../index.html" class="btn-voltar">←</a>
   </main>
 
+  <script src="../scripts/script-login.js"></script>
   <script src="../scripts/script-clientes.js"></script>
 </body>
 

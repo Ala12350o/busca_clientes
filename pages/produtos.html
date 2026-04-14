@@ -12,6 +12,7 @@
 
   <header>
     <h1>Gestão de Produtos</h1>
+    <button onclick="logout()" class="btn-logout" style="position: absolute; top: 1rem; right: 1rem; background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-weight: 600;">Sair</button>
   </header>
 
   <main>
@@ -27,19 +28,13 @@
       <button id="btn-id" onclick="buscarProdutoPorId()">Buscar por ID</button>
     </div>
     
-    <div class="acoes-adicionais">
-      <h3>Ações Adicionais</h3>
-      <div class="botoes-secundarios">
-        <button id="btn-deletar" onclick="deletarProduto()">Deletar Produto</button>
-      </div>
-    </div>
-    
     <div id="resultado-produtos"></div>
     <div id="erro-produtos" class="erro hidden"></div>
     
     <a href="../index.html" class="btn-voltar">←</a>
   </main>
 
+  <script src="../scripts/script-login.js"></script>
   <script src="../scripts/script-produtos.js"></script>
 </body>
 
